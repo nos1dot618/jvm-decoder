@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "rootDir": "src/lib/",
+    "outDir": "public/dist/",
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules/",
+    "public/dist/",
+    "**/*.test.ts",
+    "**/*.d.ts"
+  ]
+}

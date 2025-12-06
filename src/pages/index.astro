@@ -1,0 +1,20 @@
+---
+---
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+    <meta name="viewport" content="width=device-width"/>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/unzipit/dist/unzipit.min.js"></script>
+    <title>JVM Decoder</title>
+</head>
+<body>
+<h1>JVM Decoder</h1>
+<input type="file" id="jarInput" accept=".jar">
+<div id="status"></div>
+<h2>Class Files:</h2>
+<div id="classList"></div>
+<script type="module" src="dist/JVMViewer.js" is:inline></script>
+</body>
+</html>

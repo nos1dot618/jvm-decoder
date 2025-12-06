@@ -1,0 +1,7 @@
+.idea/
+.astro/
+node_modules/
+public/
+
+**.class
+**.jar
