@@ -2,19 +2,35 @@
 ---
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
-    <meta name="viewport" content="width=device-width"/>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/unzipit/dist/unzipit.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JVM Decoder</title>
+    <script src="https://cdn.jsdelivr.net/npm/unzipit/dist/unzipit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-<h1>JVM Decoder</h1>
-<input type="file" id="jarInput" accept=".jar">
-<div id="status"></div>
-<h2>Class Files:</h2>
-<div id="classList"></div>
+
+<div id="sidebar">
+    <div>
+        <div class="section-title">Upload JAR</div>
+        <div id="uploadBox">Click or Drag & Drop .JAR-file</div>
+        <input type="file" id="jarInput" accept=".jar">
+    </div>
+    <div id="searchContainer" style="display:none;">
+        <div class="section-title">Search</div>
+        <input type="text" id="search" placeholder="Search classes...">
+    </div>
+    <div id="classList"></div>
+</div>
+
+<div id="diagramPanel">
+    <div class="diagramContainer">
+        <div id="diagram" class="mermaid">graph TD;</div>
+    </div>
+</div>
+
 <script type="module" src="dist/JVMViewer.js" is:inline></script>
+
 </body>
 </html>
