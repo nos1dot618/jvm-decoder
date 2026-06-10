@@ -1,9 +1,11 @@
+import "./styles.css";
+
 // @ts-ignore
 declare const unzipit: typeof import("unzipit");
 // @ts-ignore
 declare const mermaid: import("mermaid").default;
 
-mermaid.initialize({startOnLoad: false, theme: "dark"});
+mermaid.initialize({ startOnLoad: false, theme: "dark" });
 
 const unzip = unzipit;
 
@@ -26,9 +28,9 @@ const diagram = document.getElementById("diagram");
 });
 
 // Upload Handling
-uploadBox.addEventListener("click", () => {
-    jarInput.click();
-});
+// uploadBox.addEventListener("click", () => {
+//     jarInput.click();
+// });
 
 // Drag-Enter / over / leave / drop on the upload box
 ["dragenter", "dragover"].forEach(eventName => {
@@ -142,7 +144,7 @@ function updateDiagram() {
     const classes: string[] = [...selectedClasses];
     if (classes.length === 0) {
         diagram.textContent = "graph TD;";
-        mermaid.run({nodes: [diagram]});
+        mermaid.run({ nodes: [diagram] });
         return;
     }
     let graph = "graph TD;\n";
@@ -158,5 +160,5 @@ function updateDiagram() {
     });
 
     diagram.textContent = graph;
-    mermaid.run({nodes: [diagram]});
+    mermaid.run({ nodes: [diagram] });
 }

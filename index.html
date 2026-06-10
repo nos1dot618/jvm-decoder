@@ -1,0 +1,61 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JVM ByteCode Decoder</title>
+  <script src="https://cdn.jsdelivr.net/npm/unzipit/dist/unzipit.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/98.css">
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+
+<body>
+  <div id="app">
+    <div id="sidebar" class="window">
+      <div class="title-bar">
+        <div class="title-bar-text">JVM Decoder</div>
+      </div>
+
+      <div class="window-body">
+        <fieldset>
+          <legend>Upload JAR</legend>
+          <label id="uploadBox" for="jarInput">
+            📦 Select JAR File
+          </label>
+          <input type="file" id="jarInput" accept=".jar">
+        </fieldset>
+
+        <fieldset id="searchContainer" style="display:none;">
+          <legend>Search</legend>
+          <input type="text" id="search" placeholder="Class name...">
+        </fieldset>
+
+        <fieldset>
+          <legend>Classes</legend>
+          <div id="classList"></div>
+        </fieldset>
+      </div>
+    </div>
+
+    <div id="diagramPanel" class="window">
+      <div class="title-bar">
+        <div class="title-bar-text">Dependency Graph</div>
+      </div>
+
+      <div class="window-body">
+        <div class="diagramContainer">
+          <div id="diagram" class="mermaid">
+            graph TD;
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="src/JVMViewer.ts"></script>
+
+</body>
+
+</html>

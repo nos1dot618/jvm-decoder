@@ -612,14 +612,14 @@ function decodeMethodDescriptor(descriptor: string): string[] {
         }
         if ("BCDFIJSZ".includes(c)) { // Primitive type
             const type = decodeFieldDescriptor(c)!;
-            return {type: type, nextIndex: start + 1};
+            return { type: type, nextIndex: start + 1 };
         }
         if (c === "L") { // Object reference
             const end = descriptor.indexOf(";", start);
             if (end === -1) return undefined;
             const fieldDesc = descriptor.slice(start, end + 1);
             const type = decodeFieldDescriptor(fieldDesc)!;
-            return {type: type, nextIndex: end + 1};
+            return { type: type, nextIndex: end + 1 };
         }
         if (c === "[") { // Array reference
             let pos = start;
@@ -632,7 +632,7 @@ function decodeMethodDescriptor(descriptor: string): string[] {
             }
             const full = descriptor.slice(start, inner.nextIndex);
             const type = decodeFieldDescriptor(full)!;
-            return {type: type, nextIndex: inner.nextIndex};
+            return { type: type, nextIndex: inner.nextIndex };
         }
         return undefined;
     }
@@ -715,7 +715,7 @@ export function parseClassFile(buffer: ArrayBuffer): ClassFile {
     const superClass = reader.readUint16();
 
     const interfacesCount = reader.readUint16();
-    const interfaces = Array.from({length: interfacesCount}, () => reader.readUint16());
+    const interfaces = Array.from({ length: interfacesCount }, () => reader.readUint16());
 
     const fields = readFields(reader, constantPool);
     const methods = readMethods(reader, constantPool);

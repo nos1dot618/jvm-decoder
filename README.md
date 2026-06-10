@@ -1,4 +1,4 @@
-> JVM-Decoder in TypeScript
+> JVM-Decoder in TypeScript.
 
 ---
 
@@ -13,10 +13,7 @@ javac -d ./test/ ./test/Test.java
 # Build .jar-file for the test
 jar cf ./test/test.jar ./test/*.class
 
-# Compile astro-project
 npm run build
-# Compile .ts-files
-npx tsc
 ```
 
 ## Run Test
@@ -26,10 +23,14 @@ npx tsc
 cd ./test/
 npx tsx ./ClassParser.test.ts
 cd ../
+
 # Test tool
-python -m http-server --directory public/ &
-open http://localhost:8000/
+npm run dev
 ```
+
+## Courtesy
+
+1. [Windows 98 based CSS Framework](https://github.com/jdan/98.css)
 
 ## References
 
