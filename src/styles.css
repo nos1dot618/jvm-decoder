@@ -78,6 +78,15 @@ fieldset {
     text-overflow: ellipsis;
 }
 
+.class-row.selected {
+    background: #000080;
+    color: white;
+}
+
+.class-row.selected input {
+    accent-color: white;
+}
+
 .diagramContainer {
     overflow: auto;
     height: 100%;
