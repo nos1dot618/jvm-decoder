@@ -1,5 +1,7 @@
 > JVM-Decoder in TypeScript.
 
+![Thumbnail](./resources/thumbnail.png)
+
 ---
 
 ## Getting Started
