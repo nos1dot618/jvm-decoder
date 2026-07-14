@@ -132,3 +132,10 @@ public class Test implements Runnable, Comparable<Test> {
         }
     }
 }
+
+class Animal {}
+
+abstract class Dog extends Animal {
+    private int age;
+    public abstract void bark();
+}
