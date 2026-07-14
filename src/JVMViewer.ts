@@ -4,10 +4,22 @@ import "./styles.css";
 declare const unzipit: typeof import("unzipit");
 // @ts-ignore
 declare const mermaid: import("mermaid").default;
+import * as cp from "./ClassParser.js";
 
-mermaid.initialize({ startOnLoad: false, theme: "dark" });
-
-const unzip = unzipit;
+mermaid.initialize({
+    startOnLoad: false,
+    theme: "base",
+    flowchart: {
+        nodeSpacing: 20,
+        rankSpacing: 40,
+    },
+    class: {
+        useMaxWidth: false,
+    },
+    themeVariables: {
+        fontFamily: "MS Sans Serif, Tahoma, sans-serif",
+    }
+});
 
 let entries = {};
 let selectedClasses = new Set<string>();
@@ -26,11 +38,6 @@ const diagram = document.getElementById("diagram");
         e.preventDefault();
     });
 });
-
-// Upload Handling
-// uploadBox.addEventListener("click", () => {
-//     jarInput.click();
-// });
 
 // Drag-Enter / over / leave / drop on the upload box
 ["dragenter", "dragover"].forEach(eventName => {
@@ -75,7 +82,7 @@ async function loadJarFile(file: File) {
     }
     uploadBox.textContent = `Loading '${file.name}'`;
     try {
-        const zip = await unzip.unzip(file);
+        const zip = await unzipit.unzip(file);
         entries = zip.entries;
         console.log(entries);
         classList.innerHTML = "";
@@ -86,7 +93,7 @@ async function loadJarFile(file: File) {
         }
         uploadBox.textContent = `Loading '${file.name}'`;
         searchContainer.style.display = "block";
-        updateDiagram();
+        void updateDiagram();
     } catch (err) {
         console.error(err);
         uploadBox.textContent = `Error loading .JAR '${file.name}'`;
@@ -109,7 +116,8 @@ function addClassRow(name: string) {
         } else {
             selectedClasses.delete(name);
         }
-        updateDiagram();
+        row.classList.toggle("selected", checkbox.checked);
+        void updateDiagram();
     });
 
     row.addEventListener("click", () => {
@@ -119,7 +127,8 @@ function addClassRow(name: string) {
         } else {
             selectedClasses.delete(name);
         }
-        updateDiagram();
+        row.classList.toggle("selected", checkbox.checked);
+        void updateDiagram();
     });
 
     row.appendChild(checkbox);
@@ -138,27 +147,55 @@ search.addEventListener("input", () => {
 
 });
 
-// TODO: Fix this
 // Diagram updater
-function updateDiagram() {
-    const classes: string[] = [...selectedClasses];
-    if (classes.length === 0) {
-        diagram.textContent = "graph TD;";
-        mermaid.run({ nodes: [diagram] });
-        return;
+async function updateDiagram() {
+    let graph = "classDiagram\n";
+
+    const parsed = new Map<string, cp.ClassFile>();
+    // Parse selected classes.
+    for (const path of selectedClasses) {
+        const buffer = await entries[path].arrayBuffer();
+        const cf = cp.parseClassFile(buffer);
+        console.log(cf);
+        parsed.set(cp.getClassName(cf), cf);
     }
-    let graph = "graph TD;\n";
 
-    classes.forEach((cls, i) => {
-        const id = cls.replace(/[^a-zA-Z0-9]/g, "_");
-        graph += `    ${id}["${cls.replace(".class", "")}"];\n`;
-
-        if (i > 0) {
-            const prev = classes[i - 1].replace(/[^a-zA-Z0-9]/g, "_");
-            graph += `    ${prev} --> ${id};\n`;
+    // Emit class bodies.
+    for (const [name, cf] of parsed) {
+        graph += `class ${sanitize(name)} {\n`;
+        for (const field of cf.fields) {
+            graph += `\t${visibility(field.accessFlags)} ${field.name} : ${field.descriptor}\n`;
         }
-    });
+        for (const method of cf.methods) {
+            const params = method.descriptor.slice(0, -1).join(", ");
+            const ret = method.descriptor.at(-1);
+            graph += `\t${visibility(method.accessFlags)} ${method.name}(${params}) ${ret}\n`;
+        }
+        graph += "}\n";
+    }
 
-    diagram.textContent = graph;
-    mermaid.run({ nodes: [diagram] });
+
+    // Emit inheritance.
+    for (const [name, cf] of parsed) {
+        const superClassName = cp.getSuperClassName(cf);
+        if (superClassName && parsed.has(superClassName)) {
+            graph += `${sanitize(superClassName)} <|-- ${sanitize(name)}\n`;
+        }
+    }
+
+    console.log(graph);
+
+    const { svg } = await mermaid.render("uml", graph, diagram);
+    diagram.innerHTML = svg;
+}
+
+function sanitize(name: string): string {
+    return name.replace(/[.$]/g, "_");
+}
+
+function visibility(flags: string[]): string {
+    if (flags.includes("public")) return "+";
+    if (flags.includes("private")) return "-";
+    if (flags.includes("protected")) return "#";
+    else "~";
 }
